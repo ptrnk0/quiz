@@ -1,11 +1,19 @@
 import "./App.css";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
+import { fetchQuestionsId } from "../../redux/questions/questionsOps";
+import { useAppDispatch } from "../../hooks";
 import Layout from "../Layout/Layout";
-import Home from "../../pages/Home/Home";
 import Quiz from "../../pages/Quiz/Quiz";
+import Home from "../../pages/Home/Home";
 
 function App() {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(fetchQuestionsId());
+  });
+
   return (
     <Suspense>
       <Routes>
