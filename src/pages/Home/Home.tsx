@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import InfiniteScrollText from "../../components/InfiniteScrollText/InfiniteScrollText";
+import { useAppSelector } from "../../hooks";
 
 const Home = () => {
+  const firstQuiz = useAppSelector((state) => state.questions.items[0]);
+
   return (
     <>
       <section className="relative mb-10">
@@ -22,7 +25,7 @@ const Home = () => {
             Put your knowledge to the test with our interactive HTML quiz!
           </h1>
           <Link
-            to="/"
+            to={`/${firstQuiz?.sys.id}`}
             className="cursor-pointer border-2 border-black bg-yellow-400 px-3 py-1 text-xl transition-colors duration-300 ease-in hover:bg-yellow-500"
           >
             Ready, set, code!
