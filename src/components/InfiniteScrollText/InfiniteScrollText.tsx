@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./InfiniteScrollText.css";
 
-interface InfiniteScrollTextProps {
+interface IInfiniteScrollTextProps {
   text: string;
   speed?: number;
   className?: string;
 }
 
-const InfiniteScrollText: React.FC<InfiniteScrollTextProps> = ({
+const InfiniteScrollText: React.FC<IInfiniteScrollTextProps> = ({
   text,
   speed = 10,
   className,
