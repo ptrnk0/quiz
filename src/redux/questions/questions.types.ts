@@ -1,4 +1,4 @@
-interface IQuestionsItems {
+export interface IQuestionsItems {
   sys: { id: string };
 }
 
