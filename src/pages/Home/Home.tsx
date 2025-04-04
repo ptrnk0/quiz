@@ -6,7 +6,7 @@ const Home = () => {
   const firstQuiz = useAppSelector((state) => state.questions.items[0]);
 
   return (
-    <>
+    <main className="relative m-auto flex h-full w-11/12 grow-1 flex-col">
       <section className="relative mb-10">
         <InfiniteScrollText
           text="test your HTML skills"
@@ -20,7 +20,7 @@ const Home = () => {
         <div className="absolute -right-1 -bottom-1 h-full w-full border-2 border-black bg-pink-100"></div>
 
         <div className="absolute flex h-full w-full flex-col items-center justify-center gap-10 border-2 border-black bg-pink-100 p-4">
-          <h1 className="text-center text-2xl text-pretty">
+          <h1 className="text-center text-2xl font-semibold text-pretty uppercase">
             Think you&#39;ve mastered the building blocks of the web? <br />
             Put your knowledge to the test with our interactive HTML quiz!
           </h1>
@@ -32,7 +32,7 @@ const Home = () => {
           </Link>
         </div>
       </section>
-    </>
+    </main>
   );
 };
 
