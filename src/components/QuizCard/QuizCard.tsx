@@ -4,6 +4,7 @@ import { useAppSelector } from "../../hooks";
 import {
   IAnswer,
   IQuestionsItems,
+  IQuizPossibleAnswers,
   IQuizResponse,
 } from "../../types/index.types";
 import QuizForm from "../QuizForm/QuizForm";
@@ -18,8 +19,8 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
   const [prevQuiz, setPrevQuiz] = useState<null | IQuestionsItems>(null);
   const [nextQuiz, setNextQuiz] = useState<null | IQuestionsItems>(null);
   const [answersForCurrentQuiz, setAnswersForCurrentQuiz] = useState<
-    null | IAnswer[]
-  >(null);
+    undefined | IQuizPossibleAnswers[]
+  >();
   const quizzesList = useAppSelector((state) => state.questions.items);
   const allAnswers = useAppSelector((state) => state.answers.items);
 
@@ -38,10 +39,13 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
 
   useEffect(() => {
     if (allAnswers.length !== 0 && quiz) {
-      const answersForCurrentQuiz: IAnswer[] = allAnswers.filter((answer) => {
-        return answer.quizId === quiz.id;
-      });
-      setAnswersForCurrentQuiz(answersForCurrentQuiz);
+      const answersForCurrentQuiz: IAnswer | undefined = allAnswers.find(
+        (answer) => {
+          return answer.quizId === quiz.id;
+        },
+      );
+
+      setAnswersForCurrentQuiz(answersForCurrentQuiz?.selectedAnswers);
     }
   }, [allAnswers, quiz]);
 
@@ -75,7 +79,7 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
           <ButtonLink link={prevQuiz}>Prev</ButtonLink>
         </li>
 
-        {/* {!result && (
+        {!answersForCurrentQuiz && (
           <li className="-order-1 flex w-full grow-1 justify-center self-center md:order-0 md:block md:w-auto md:grow-0">
             <button
               form="quiz-form"
@@ -85,7 +89,7 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
               Submit
             </button>
           </li>
-        )} */}
+        )}
         <li>
           <ButtonLink link={nextQuiz}>Next</ButtonLink>
         </li>
