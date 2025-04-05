@@ -36,3 +36,10 @@ export interface IQuestionsState {
   loading: boolean;
   error: null | unknown;
 }
+
+export interface IAlgoliaResult {
+  description: string;
+  objectID: string;
+  resources: string[];
+  title: string;
+}
