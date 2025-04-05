@@ -1,6 +1,6 @@
 import { createSlice, isAnyOf } from "@reduxjs/toolkit";
 import { fetchQuestionsId } from "./questionsOps";
-import { IQuestionsState } from "./questions.types";
+import { IQuestionsState } from "../../types/index.types";
 
 const initialState: IQuestionsState = {
   items: [],
