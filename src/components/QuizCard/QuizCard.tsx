@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks";
 import {
@@ -9,6 +8,7 @@ import {
 } from "../../types/index.types";
 import QuizForm from "../QuizForm/QuizForm";
 import ButtonLink from "../ButtonLink/ButtonLink";
+import { contentfulAxios } from "../../redux/questions/questionsOps";
 
 interface IQuizCardProps {
   quizId: string | undefined;
@@ -28,8 +28,8 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await axios.get(
-          `https://cdn.contentful.com/spaces/${import.meta.env.VITE_SPACE_ID}/environments/${import.meta.env.VITE_ENVIRONMENTS}/entries/${quizId}?access_token=${import.meta.env.VITE_ACCESS_TOKEN}`,
+        const { data } = await contentfulAxios.get(
+          `/spaces/${import.meta.env.VITE_SPACE_ID}/environments/${import.meta.env.VITE_ENVIRONMENTS}/entries/${quizId}?access_token=${import.meta.env.VITE_ACCESS_TOKEN}`,
         );
         setQuiz(data.fields);
       } catch {
