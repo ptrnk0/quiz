@@ -1,9 +1,16 @@
 import { Link } from "react-router-dom";
 import InfiniteScrollText from "../../components/InfiniteScrollText/InfiniteScrollText";
-import { useAppSelector } from "../../hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { resetAnswers } from "../../redux/answersSlice";
 
 const Home = () => {
   const firstQuiz = useAppSelector((state) => state.questions.items[0]);
+  const answers = useAppSelector((state) => state.answers.items);
+  const dispatch = useAppDispatch();
+
+  const handleClick = () => {
+    dispatch(resetAnswers());
+  };
 
   return (
     <main className="relative m-auto flex h-full w-11/12 grow-1 flex-col">
@@ -30,6 +37,15 @@ const Home = () => {
           >
             Ready, set, code!
           </Link>
+          {answers.length > 0 && (
+            <button
+              type="button"
+              className="cursor-pointer uppercase underline"
+              onClick={handleClick}
+            >
+              Reset answers!
+            </button>
+          )}
         </div>
       </section>
     </main>
