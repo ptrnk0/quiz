@@ -1,4 +1,4 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { IQuizPossibleAnswers, IQuizResponse } from "../../types/index.types";
 import { useAppDispatch } from "../../hooks";
 import { addAnswers, changeScore } from "../../redux/answersSlice";
@@ -15,11 +15,47 @@ const QuizForm = ({ quiz, answers }: IQuizFromProps) => {
   const [selectedWrong, setSelectedWrong] = useState<IQuizPossibleAnswers[]>();
   const [checked, setChecked] = useState(false);
 
+  const checkAnswers = useCallback(
+    (selectedAnswers: IQuizPossibleAnswers[]): number => {
+      const correctAnswers = quiz.possibleAnswers.filter(
+        (answer) => answer.isCorrect,
+      );
+      const wrongAnswers = quiz.possibleAnswers.filter(
+        (answer) => !answer.isCorrect,
+      );
+
+      const selectedCorrectAnswers = selectedAnswers.filter((answer) =>
+        correctAnswers.some((correct) => correct.id === answer.id),
+      );
+      const selectedWrongAnswers = selectedAnswers.filter((answer) =>
+        wrongAnswers.some((wrong) => wrong.id === answer.id),
+      );
+
+      setSelectedCorrect(selectedCorrectAnswers);
+      setSelectedWrong(selectedWrongAnswers);
+
+      const totalCorrect = correctAnswers.length;
+      const correctCount = selectedCorrectAnswers.length;
+      const wrongCount = selectedWrongAnswers.length;
+
+      const rawScore = correctCount - wrongCount * 0.5;
+      const finalScore = Math.max(0, rawScore / totalCorrect);
+
+      return finalScore;
+    },
+    [quiz.possibleAnswers],
+  );
+
   useEffect(() => {
     if (answers) {
       setChecked(true);
+      checkAnswers(answers);
+    } else {
+      setChecked(false);
+      setSelectedCorrect(undefined);
+      setSelectedWrong(undefined);
     }
-  }, [answers]);
+  }, [answers, quiz, checkAnswers]);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,34 +87,6 @@ const QuizForm = ({ quiz, answers }: IQuizFromProps) => {
     dispatch(changeScore(score));
   };
 
-  const checkAnswers = (selectedAnswers: IQuizPossibleAnswers[]): number => {
-    const correctAnswers = quiz.possibleAnswers.filter(
-      (answer) => answer.isCorrect,
-    );
-    const wrongAnswers = quiz.possibleAnswers.filter(
-      (answer) => !answer.isCorrect,
-    );
-
-    const selectedCorrectAnswers = selectedAnswers.filter((answer) =>
-      correctAnswers.some((correct) => correct.id === answer.id),
-    );
-    const selectedWrongAnswers = selectedAnswers.filter((answer) =>
-      wrongAnswers.some((wrong) => wrong.id === answer.id),
-    );
-
-    setSelectedCorrect(selectedCorrectAnswers);
-    setSelectedWrong(selectedWrongAnswers);
-
-    const totalCorrect = correctAnswers.length;
-    const correctCount = selectedCorrectAnswers.length;
-    const wrongCount = selectedWrongAnswers.length;
-
-    const rawScore = correctCount - wrongCount * 0.5;
-    const finalScore = Math.max(0, rawScore / totalCorrect);
-
-    return finalScore;
-  };
-
   const labelColor = (id: number) => {
     if (selectedCorrect?.some((answer) => answer.id === id)) {
       return { backgroundColor: "green" };
@@ -94,25 +102,27 @@ const QuizForm = ({ quiz, answers }: IQuizFromProps) => {
       id="quiz-form"
       onSubmit={(event) => handleSubmit(event)}
     >
-      {quiz.possibleAnswers.map(({ id, text }) => (
-        <div key={id}>
-          <input
-            type={quiz.questionType === "multiple" ? "radio" : "checkbox"}
-            id={`option-${id}`}
-            name="quiz"
-            className="peer hidden"
-            defaultValue={id}
-            disabled={checked}
-          />
-          <label
-            htmlFor={`option-${id}`}
-            className="text-md flex h-full cursor-pointer items-center justify-center border-2 border-black bg-yellow-400 px-3 py-1 text-center transition-colors duration-300 ease-in peer-checked:bg-yellow-600 hover:bg-yellow-500 md:text-xl"
-            style={labelColor(id)}
-          >
-            {text}
-          </label>
-        </div>
-      ))}
+      {quiz.possibleAnswers.map(({ id, text }) => {
+        return (
+          <div key={id}>
+            <input
+              type={quiz.questionType === "multiple" ? "radio" : "checkbox"}
+              id={`option-${id}`}
+              name="quiz"
+              className="peer hidden"
+              defaultValue={id}
+              disabled={checked}
+            />
+            <label
+              htmlFor={`option-${id}`}
+              className="text-md flex h-full cursor-pointer items-center justify-center border-2 border-black bg-yellow-400 px-3 py-1 text-center transition-colors duration-300 ease-in peer-checked:bg-yellow-600 hover:bg-yellow-500 md:text-xl"
+              style={labelColor(id)}
+            >
+              {text}
+            </label>
+          </div>
+        );
+      })}
     </form>
   );
 };
