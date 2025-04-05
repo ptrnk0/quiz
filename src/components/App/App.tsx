@@ -1,4 +1,4 @@
-import "./App.module.css";
+import "./App.css";
 import { Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { fetchQuestionsId } from "../../redux/questions/questionsOps";
