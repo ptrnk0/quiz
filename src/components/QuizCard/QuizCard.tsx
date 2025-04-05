@@ -22,6 +22,7 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
   const [answersForCurrentQuiz, setAnswersForCurrentQuiz] = useState<
     undefined | IQuizPossibleAnswers[]
   >();
+  const [currentQuizStep, setCurrentQuizStep] = useState<number>();
   const quizzesList = useAppSelector((state) => state.questions.items);
   const allAnswers = useAppSelector((state) => state.answers.items);
 
@@ -53,6 +54,7 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
   useEffect(() => {
     const foundQuiz = quizzesList.find((quiz) => quiz.sys.id === quizId);
     const currentQuizIndex = foundQuiz ? quizzesList.indexOf(foundQuiz) : -1;
+    setCurrentQuizStep(currentQuizIndex + 1);
 
     setPrevQuiz(null);
     setNextQuiz(null);
@@ -83,7 +85,7 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
           <QuizForm quiz={quiz} answers={answersForCurrentQuiz} />
         </>
       )}
-      <ul className="mt-auto flex flex-wrap justify-between gap-2 md:justify-around">
+      <ul className="m-auto flex flex-wrap justify-between gap-2 md:justify-around">
         {prevQuiz ? (
           <ButtonLink link={prevQuiz.sys.id}>Prev</ButtonLink>
         ) : (
@@ -109,6 +111,11 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
           )}
         </li>
       </ul>
+      <progress
+        max={quizzesList.length}
+        value={currentQuizStep}
+        className="h-4 w-full rounded bg-green-200 [&::-moz-progress-bar]:bg-green-600 [&::-webkit-progress-bar]:bg-yellow-200 [&::-webkit-progress-value]:bg-yellow-400"
+      ></progress>
     </section>
   );
 };
