@@ -7,7 +7,7 @@ const ResultsInfo = () => {
   return (
     <section className="absolute top-1/2 left-1/2 z-1 m-auto flex h-3/4 w-10/12 grow-1 -translate-x-1/2 -translate-y-1/2 flex-col justify-center border-2 border-black bg-pink-100 px-5 py-10 lg:h-1/2 lg:w-200">
       <span className="uppercase">Your score:</span>
-      {score} / {questions.length}
+      {score.toFixed(1)} / {questions.length}
       <ButtonLink link="">Go to home</ButtonLink>
     </section>
   );
