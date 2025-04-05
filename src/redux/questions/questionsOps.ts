@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { IQuestionsIdResponse } from "./questions.types";
+import { IQuestionsIdResponse } from "../../types/index.types";
 
 const SPACE = import.meta.env.VITE_SPACE_ID;
 const ENVIRONMENTS = import.meta.env.VITE_ENVIRONMENTS;
