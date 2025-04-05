@@ -1,4 +1,4 @@
-import { FormEvent, useCallback, useEffect, useState } from "react";
+import { FormEvent, useCallback, useEffect, useRef, useState } from "react";
 import { IQuizPossibleAnswers, IQuizResponse } from "../../types/index.types";
 import { useAppDispatch } from "../../hooks";
 import { addAnswers, changeScore } from "../../redux/answersSlice";
@@ -10,6 +10,7 @@ interface IQuizFromProps {
 
 const QuizForm = ({ quiz, answers }: IQuizFromProps) => {
   const dispatch = useAppDispatch();
+  const formRef = useRef<HTMLFormElement>(null); // Add useRef for the form
   const [selectedCorrect, setSelectedCorrect] =
     useState<IQuizPossibleAnswers[]>();
   const [selectedWrong, setSelectedWrong] = useState<IQuizPossibleAnswers[]>();
@@ -54,6 +55,11 @@ const QuizForm = ({ quiz, answers }: IQuizFromProps) => {
       setChecked(false);
       setSelectedCorrect(undefined);
       setSelectedWrong(undefined);
+
+      // Reset form inputs using useRef
+      if (formRef.current) {
+        formRef.current.reset();
+      }
     }
   }, [answers, quiz, checkAnswers]);
 
@@ -98,6 +104,7 @@ const QuizForm = ({ quiz, answers }: IQuizFromProps) => {
 
   return (
     <form
+      ref={formRef} // Attach the ref to the form
       className="grid gap-2 md:grid-cols-2 md:gap-4"
       id="quiz-form"
       onSubmit={(event) => handleSubmit(event)}
