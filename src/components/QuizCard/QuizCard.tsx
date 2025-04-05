@@ -15,6 +15,7 @@ interface IQuizCardProps {
 }
 
 const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
+  const [error, setError] = useState(false);
   const [quiz, setQuiz] = useState<IQuizResponse>();
   const [prevQuiz, setPrevQuiz] = useState<null | IQuestionsItems>(null);
   const [nextQuiz, setNextQuiz] = useState<null | IQuestionsItems>(null);
@@ -31,8 +32,8 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
           `https://cdn.contentful.com/spaces/${import.meta.env.VITE_SPACE_ID}/environments/${import.meta.env.VITE_ENVIRONMENTS}/entries/${quizId}?access_token=${import.meta.env.VITE_ACCESS_TOKEN}`,
         );
         setQuiz(data.fields);
-      } catch (error) {
-        console.log(error);
+      } catch {
+        setError(true);
       }
     })();
   }, [quizId]);
@@ -63,6 +64,14 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
       setNextQuiz(quizzesList[currentQuizIndex + 1]);
     }
   }, [quizzesList, quizId]);
+
+  if (error) {
+    return (
+      <p className="text-center uppercase">
+        Something went wrong, please try again.
+      </p>
+    );
+  }
 
   return (
     <section className="absolute top-1/2 left-1/2 z-1 m-auto flex h-3/4 w-10/12 grow-1 -translate-x-1/2 -translate-y-1/2 flex-col justify-center border-2 border-black bg-pink-100 px-5 py-10 lg:h-1/2 lg:w-200">
