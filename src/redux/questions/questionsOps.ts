@@ -6,6 +6,8 @@ const SPACE = import.meta.env.VITE_SPACE_ID;
 const ENVIRONMENTS = import.meta.env.VITE_ENVIRONMENTS;
 const ACCESS_TOKEN = import.meta.env.VITE_ACCESS_TOKEN;
 
+export const contentfulAxios = axios;
+
 axios.defaults.baseURL = "https://cdn.contentful.com";
 
 export const fetchQuestionsId = createAsyncThunk<IQuestionsIdResponse>(
