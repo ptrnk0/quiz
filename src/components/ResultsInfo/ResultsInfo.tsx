@@ -2,14 +2,22 @@ import { useEffect, useState } from "react";
 import { useAppSelector } from "../../hooks";
 import ButtonLink from "../ButtonLink/ButtonLink";
 import { fetchResultByScore } from "../../utils/algoliaFetch";
+import { IAlgoliaResult } from "../../types/index.types";
 
 const ResultsInfo = () => {
   const score = useAppSelector((state) => state.answers.score);
   const questions = useAppSelector((state) => state.questions.items);
-  const [result, setResult] = useState<Result | null>(null);
+  const [result, setResult] = useState<IAlgoliaResult | null>(null);
+  console.log(result);
 
   useEffect(() => {
-    fetchResultByScore(Math.ceil(score)).then((res) => setResult(res));
+    fetchResultByScore(Math.ceil(score)).then((res) => {
+      if (res && "title" in res && "description" in res) {
+        setResult(res as IAlgoliaResult);
+      } else {
+        setResult(null);
+      }
+    });
   }, [score]);
 
   return (
@@ -30,7 +38,7 @@ const ResultsInfo = () => {
                 Recommended for you:
               </p>
               <ul className="mt-2 list-inside list-disc space-y-1">
-                {result.resources.map((res, index) => (
+                {result.resources.map((res, index: number) => (
                   <li key={index} className="text-sm">
                     {res}
                   </li>
