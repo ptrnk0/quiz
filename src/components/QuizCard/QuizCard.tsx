@@ -84,9 +84,11 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
         </>
       )}
       <ul className="mt-auto flex flex-wrap justify-between gap-2 md:justify-around">
-        <li>
-          <ButtonLink link={prevQuiz}>Prev</ButtonLink>
-        </li>
+        {prevQuiz ? (
+          <ButtonLink link={prevQuiz.sys.id}>Prev</ButtonLink>
+        ) : (
+          <ButtonLink link="">Home</ButtonLink>
+        )}
 
         {!answersForCurrentQuiz && (
           <li className="-order-1 flex w-full grow-1 justify-center self-center md:order-0 md:block md:w-auto md:grow-0">
@@ -100,7 +102,11 @@ const QuizCard: React.FC<IQuizCardProps> = ({ quizId }) => {
           </li>
         )}
         <li>
-          <ButtonLink link={nextQuiz}>Next</ButtonLink>
+          {nextQuiz ? (
+            <ButtonLink link={nextQuiz.sys.id}>Next</ButtonLink>
+          ) : (
+            <ButtonLink link="results">Results</ButtonLink>
+          )}
         </li>
       </ul>
     </section>
