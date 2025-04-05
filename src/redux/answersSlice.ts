@@ -13,8 +13,11 @@ const answersSlice = createSlice({
     addAnswers(state, action: PayloadAction<IAnswer>) {
       state.items.push(action.payload);
     },
+    changeScore(state, action) {
+      state.score += action.payload;
+    },
   },
 });
 
-export const { addAnswers } = answersSlice.actions;
+export const { addAnswers, changeScore } = answersSlice.actions;
 export default answersSlice.reducer;
