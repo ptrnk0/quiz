@@ -16,8 +16,11 @@ const answersSlice = createSlice({
     changeScore(state, action) {
       state.score += action.payload;
     },
+    resetAnswers() {
+      return initialState;
+    },
   },
 });
 
-export const { addAnswers, changeScore } = answersSlice.actions;
+export const { addAnswers, changeScore, resetAnswers } = answersSlice.actions;
 export default answersSlice.reducer;
